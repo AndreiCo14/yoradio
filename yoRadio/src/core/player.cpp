@@ -136,13 +136,13 @@ void Player::loop() {
         if (requestP.payload>0) {
           config.setLastStation((uint16_t)requestP.payload);
         }
-        _play((uint16_t)abs(requestP.payload)); 
+        _play((uint16_t)abs(requestP.payload));			//Запуск станции №
         if (player_on_station_change) player_on_station_change(); 
         pm.on_station_change();
         break;
       }
       case PR_VOL: {
-        config.setVolume(requestP.payload);
+        config.setVolume(requestP.payload);			//Изменение звука
         Audio::setVolume(volToI2S(requestP.payload));
         break;
       }
@@ -165,8 +165,8 @@ void Player::loop() {
   Audio::loop();
   if(!isRunning() && _status==PLAYING) _stop(true);
   if(_volTimer){
-    if((millis()-_volTicks)>3000){
-      config.saveVolume();
+    if((millis()-_volTicks)>3000){				//Через 3 секунды
+      config.saveVolume();					//сохранить уровень звука в EEPROM
       _volTimer=false;
     }
   }
@@ -264,7 +264,7 @@ void Player::browseUrl(){
 }
 #endif
 
-void Player::prev() {
+void Player::prev() {						//Команда Предыдущая станция
   
   uint16_t lastStation = config.lastStation();
   if(config.getMode()==PM_WEB || !config.store.sdsnuffle){
@@ -273,17 +273,17 @@ void Player::prev() {
   sendCommand({PR_PLAY, config.lastStation()});
 }
 
-void Player::next() {
+void Player::next() {						//Команда Следующая станция
   uint16_t lastStation = config.lastStation();
   if(config.getMode()==PM_WEB || !config.store.sdsnuffle){
     if (lastStation == config.store.countStation) config.lastStation(1); else config.lastStation(lastStation+1);
   }else{
-    config.lastStation(random(1, config.store.countStation));
+    config.lastStation(random(1, config.store.countStation));	//Случайная станция
   }
   sendCommand({PR_PLAY, config.lastStation()});
 }
 
-void Player::toggle() {
+void Player::toggle() {						//Переключение STOP/PLAY
   if (_status == PLAYING) {
     sendCommand({PR_STOP, 0});
   } else {
@@ -293,10 +293,11 @@ void Player::toggle() {
 
 void Player::stepVol(bool up) {
     int nv;
-    if(up) nv = config.store.volume*1.334+1;
-      else nv = config.store.volume/1.334;
-      if(nv<0) nv=0;
-      if(nv>254) nv=254;
+								//Снизу малыми шагами...
+    if(up) nv = config.store.volume*1.334+1;			//Увеличение звука в 1,334 раза
+      else nv = config.store.volume/1.334;			//Уменьшение звука в 1,334 раза
+    if(nv<0) nv=0;
+    if(nv>254) nv=254;
     setVol(nv);
 /*
   if (up) {
@@ -327,7 +328,7 @@ void Player::_loadVol(uint8_t volume) {
 }
 
 void Player::setVol(uint8_t volume) {
-  _volTicks = millis();
-  _volTimer = true;
-  player.sendCommand({PR_VOL, volume});
+  _volTicks = millis();						//Запоминаем время
+  _volTimer = true;						//Флаг запуска таймера для сохранения
+  player.sendCommand({PR_VOL, volume});				//Изменение уровня
 }

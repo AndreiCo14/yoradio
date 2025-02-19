@@ -25,11 +25,11 @@ constexpr uint8_t nrOfButtons = sizeof(button) / sizeof(button[0]);
 #elif ENC_HALFQUARD==255
 #define ENCODER_STEPS 1
 #endif
-#if ENC2_HALFQUARD==false
+#if ENC2_HALFQUARD==false	//1 состояние за цикл
 #define ENCODER2_STEPS 4
-#elif ENC2_HALFQUARD==true
+#elif ENC2_HALFQUARD==true	//2 состояния за цикл
 #define ENCODER2_STEPS 2
-#elif ENC2_HALFQUARD==255
+#elif ENC2_HALFQUARD==255	//4 состояния за цикл
 #define ENCODER2_STEPS 1
 #endif
 
@@ -164,28 +164,29 @@ void encodersLoop(yoEncoder *enc, bool first){
   int8_t encoderDelta = enc->encoderChanged();
   if (encoderDelta!=0)
   {
-    uint8_t encBtnState = digitalRead(first?ENC_BTNB:ENC2_BTNB);
-#   if defined(DUMMYDISPLAY) && !defined(USE_NEXTION)
-    first = first?(first && encBtnState):(!encBtnState);
-    if(first){
+    uint8_t encBtnState = digitalRead(first?ENC_BTNB:ENC2_BTNB);	//Читаем кнопку энкодера
+#   if defined(DUMMYDISPLAY) && !defined(USE_NEXTION)			//Если есть дисплей и не NEXTION
+//    first = first?(first && encBtnState):(!encBtnState);
+    first = first?(encBtnState):(!encBtnState);
+    if(first){								//Если TRUE (1+НЕнаж) или (2+наж)
       int nv = config.store.volume+encoderDelta;
       if(nv<0) nv=0;
       if(nv>254) nv=254;
-      player.setVol((uint8_t)nv);  
-    }else{
-      if(encoderDelta > 0) player.next(); else player.prev();
+      player.setVol((uint8_t)nv);					//изменяем звук
+    }else{								//Если FALSE
+      if(encoderDelta > 0) player.next(); else player.prev();		//
     }
 #   else
-    if(first){
+    if(first){								//Если первый энкодер
       controlsEvent(encoderDelta > 0, encoderDelta);
-    }else{
-      if (encBtnState == HIGH && display.mode() == PLAYER) {
+    }else{								//Если второй энкодер
+      if (encBtnState == HIGH && display.mode() == PLAYER) {		//кнопка не нажата и проигрывание
         if(config.store.skipPlaylistUpDown){
-          if(encoderDelta > 0) player.next(); else player.prev();
+          if(encoderDelta > 0) player.next(); else player.prev();	//
           return;
         }
-        display.putRequest(NEWMODE, STATIONS);
-        while(display.mode() != STATIONS) {delay(10);}
+        display.putRequest(NEWMODE, STATIONS);				//Дисплей в режим STATIONS
+        while(display.mode() != STATIONS) {delay(10);}			//Ждем...
       }
       controlsEvent(encoderDelta > 0, encoderDelta);
     }
@@ -265,7 +266,7 @@ void irLoop() {
                 irBlink();
                 if (display.mode() == NUMBERS) {
                   display.putRequest(NEWMODE, PLAYER);
-                  player.sendCommand({PR_PLAY, display.numOfNextStation});
+                  player.sendCommand({PR_PLAY, display.numOfNextStation});	//Запуск станции по номеру (пульт)
                   display.numOfNextStation = 0;
                   break;
                 }
@@ -354,6 +355,7 @@ void irLoop() {
 }
 #endif // if IR_PIN!=255
 
+//Долгое нажатие кнопки
 void onBtnLongPressStart(int id) {
   switch ((controlEvt_e)id) {
     case EVT_BTNLEFT:
@@ -368,14 +370,14 @@ void onBtnLongPressStart(int id) {
 #       if defined(DUMMYDISPLAY) && !defined(USE_NEXTION)
         break;
 #       endif
-        display.putRequest(NEWMODE, display.mode() == PLAYER ? STATIONS : PLAYER);
+        display.putRequest(NEWMODE, display.mode() == PLAYER ? STATIONS : PLAYER);//Переключение дисплея на STATIONS/PLAYER по долгому нажатию ENC1
         break;
       }
     case EVT_ENC2BTNB: {
 #       if defined(DUMMYDISPLAY) && !defined(USE_NEXTION)
         break;
 #       endif
-        display.putRequest(NEWMODE, display.mode() == PLAYER ? VOL : PLAYER);
+        display.putRequest(NEWMODE, display.mode() == PLAYER ? VOL : PLAYER);	//Переключение дисплея на VOL/PLAYER по долгому нажатию ENC2
         break;
       }
     case EVT_BTNMODE: {
@@ -456,9 +458,9 @@ void controlsEvent(bool toRight, int8_t volDelta) {
       int nv = config.store.volume+volDelta;
       if(nv<0) nv=0;
       if(nv>254) nv=254;
-      player.setVol((uint8_t)nv);
+      player.setVol((uint8_t)nv);			//Установка уровня звука
     }else{
-      player.stepVol(toRight);
+      player.stepVol(toRight);				//Изменение уровня звука Up/Down шагами
     }
   }
   if (display.mode() == STATIONS) {
@@ -467,7 +469,7 @@ void controlsEvent(bool toRight, int8_t volDelta) {
     if (p < 1) p = config.store.countStation;
     if (p > config.store.countStation) p = 1;
     display.currentPlItem = p;
-    display.putRequest(DRAWPLAYLIST, p);
+    display.putRequest(DRAWPLAYLIST, p);		//Показать плейлист
   }
 }
 
@@ -483,26 +485,27 @@ void onBtnClick(int id) {
       }
     case EVT_BTNCENTER:
     case EVT_ENCBTNB:
+//Кнопка ENC2
     case EVT_ENC2BTNB: {
         if (display.mode() == NUMBERS) {
           display.numOfNextStation = 0;
           display.putRequest(NEWMODE, PLAYER);
         }
         if (display.mode() == PLAYER) {
-          player.toggle();
+          player.toggle();						//Переключение плеера Play/Stop
         }
         if (display.mode() == SCREENSAVER || display.mode() == SCREENBLANK) {
-          display.putRequest(NEWMODE, PLAYER);
+          display.putRequest(NEWMODE, PLAYER);				//Показать плеер
           #ifdef DSP_LCD
             delay(200);
           #endif
         }
-        if (display.mode() == STATIONS) {
+        if (display.mode() == STATIONS) {				//Если станции
           display.putRequest(NEWMODE, PLAYER);
           #ifdef DSP_LCD
             delay(200);
           #endif
-          player.sendCommand({PR_PLAY, display.currentPlItem});
+          player.sendCommand({PR_PLAY, display.currentPlItem});		//запуск выбранного в плейлисте
         }
         if(network.status==SOFT_AP || display.mode()==LOST){
           #ifdef USE_SD
