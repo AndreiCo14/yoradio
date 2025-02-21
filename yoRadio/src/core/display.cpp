@@ -317,7 +317,7 @@ void Display::_swichMode(displayMode_e newmode) {
   if (newmode == STATIONS) {
     _pager.setPage( pages[PG_PLAYLIST]);
     _plcurrent.setText("");
-    currentPlItem = config.lastStation();
+    currentPlItem = config.lastStation();		//При переключении станции показ установка на играющую позицию плейлиста
     _drawPlaylist();
   }
   
