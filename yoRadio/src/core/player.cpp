@@ -49,7 +49,7 @@ void Player::init() {
     #endif
   #else
     SPI.begin();
-    if(VS1053_RST>0) ResetChip();
+    if(VS1053_RST>0) ResetChip();		//Если определен отдельный пин Reset, сброс VS1053
     begin();
   #endif
   setBalance(config.store.balance);
@@ -166,7 +166,7 @@ void Player::loop() {
   if(!isRunning() && _status==PLAYING) _stop(true);
   if(_volTimer){
     if((millis()-_volTicks)>3000){				//Через 3 секунды
-      config.saveVolume();					//сохранить уровень звука в EEPROM
+      config.saveVolume();					//вызов функции сохранить уровень звука в EEPROM в config.cpp
       _volTimer=false;
     }
   }

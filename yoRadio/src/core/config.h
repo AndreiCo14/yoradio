@@ -84,64 +84,64 @@ struct theme_t {
   uint16_t playlist[5];
 };
 struct config_t
-{
-  uint16_t  config_set; //must be 4262
-  uint16_t  version;
-  uint8_t   volume;
-  int8_t    balance;
-  int8_t    trebble;
-  int8_t    middle;
-  int8_t    bass;
-  uint16_t  lastStation;
-  uint16_t  countStation;
-  uint8_t   lastSSID;
-  bool      audioinfo;
-  uint8_t   smartstart;
-  int8_t    tzHour;
-  int8_t    tzMin;
-  uint16_t  timezoneOffset;
-  bool      vumeter;
-  uint8_t   softapdelay;
-  bool      flipscreen;
-  bool      invertdisplay;
-  bool      numplaylist;
-  bool      fliptouch;
-  bool      dbgtouch;
-  bool      dspon;
-  uint8_t   brightness;
-  uint8_t   contrast;
-  char      sntp1[35];
-  char      sntp2[35];
-  bool      showweather;
-  char      weatherlat[10];
-  char      weatherlon[10];
-  char      weatherkey[WEATHERKEY_LENGTH];
-  uint16_t  _reserved;
-  uint16_t  lastSdStation;
-  bool      sdsnuffle;
-  uint8_t   volsteps;
-  uint16_t  encacc;
-  uint8_t   play_mode;  //0 WEB, 1 SD
-  uint8_t   irtlp;
-  bool      btnpullup;
-  uint16_t  btnlongpress;
-  uint16_t  btnclickticks;
-  uint16_t  btnpressticks;
-  bool      encpullup;
-  bool      enchalf;
-  bool      enc2pullup;
-  bool      enc2half;
-  bool      forcemono;
-  bool      i2sinternal;
-  bool      rotate90;
-  bool      screensaverEnabled;
-  uint16_t  screensaverTimeout;
-  bool      screensaverBlank;
-  bool      screensaverPlayingEnabled;
-  uint16_t  screensaverPlayingTimeout;
-  bool      screensaverPlayingBlank;
-  char      mdnsname[24];
-  bool      skipPlaylistUpDown;
+{                                      //адреса EEPROM
+  uint16_t  config_set; //must be 4262 //500
+  uint16_t  version;//502
+  uint8_t   volume;//504
+  int8_t    balance;//505
+  int8_t    trebble;//506
+  int8_t    middle;//507
+  int8_t    bass;//508
+  uint16_t  lastStation;//510
+  uint16_t  countStation;//512
+  uint8_t   lastSSID;//514
+  bool      audioinfo;//515
+  uint8_t   smartstart;//516
+  int8_t    tzHour;//517
+  int8_t    tzMin;//518
+  uint16_t  timezoneOffset;//520
+  bool      vumeter;//522
+  uint8_t   softapdelay;//523
+  bool      flipscreen;//524
+  bool      invertdisplay;//525
+  bool      numplaylist;//526
+  bool      fliptouch;//527
+  bool      dbgtouch;//528
+  bool      dspon;//529
+  uint8_t   brightness;//530
+  uint8_t   contrast;//531
+  char      sntp1[35];//532-536
+  char      sntp2[35];//537-601
+  bool      showweather;//602
+  char      weatherlat[10];//603-612
+  char      weatherlon[10];//613-622
+  char      weatherkey[WEATHERKEY_LENGTH];//623-680
+  uint16_t  _reserved;//682
+  uint16_t  lastSdStation;//684
+  bool      sdsnuffle;//686
+  uint8_t   volsteps;//687
+  uint16_t  encacc;//688
+  uint8_t   play_mode;  //0 WEB, 1 SD //690
+  uint8_t   irtlp;//691
+  bool      btnpullup;//692
+  uint16_t  btnlongpress;//694
+  uint16_t  btnclickticks;//696
+  uint16_t  btnpressticks;//698
+  bool      encpullup;//700
+  bool      enchalf;//701
+  bool      enc2pullup;//702
+  bool      enc2half;//703
+  bool      forcemono;//704
+  bool      i2sinternal;//705
+  bool      rotate90;//706
+  bool      screensaverEnabled;//707
+  uint16_t  screensaverTimeout;//709
+  bool      screensaverBlank;//710
+  bool      screensaverPlayingEnabled;//711
+  uint16_t  screensaverPlayingTimeout;//713
+  bool      screensaverPlayingBlank;//714
+  char      mdnsname[24];//738
+  bool      skipPlaylistUpDown;//739
 };
 
 #if IR_PIN!=255
@@ -251,7 +251,7 @@ class Config {
       return (size_t)((const uint8_t *)field - (const uint8_t *)&store) + EEPROM_START;
     }
     template <typename T>
-    void saveValue(T *field, const T &value, bool commit=true, bool force=false){
+    void saveValue(T *field, const T &value, bool commit=true, bool force=false){			//Сохранение в EEPROM
       if(*field == value && !force) return;
       *field = value;
       size_t address = getAddr(field);
@@ -259,7 +259,7 @@ class Config {
       if(commit)
         EEPROM.commit();
     }
-    void saveValue(char *field, const char *value, size_t N, bool commit=true, bool force=false) {
+    void saveValue(char *field, const char *value, size_t N, bool commit=true, bool force=false) {	//Сохранение в EEPROM
       if (strcmp(field, value) == 0 && !force) return;
       strlcpy(field, value, N);
       size_t address = getAddr(field);

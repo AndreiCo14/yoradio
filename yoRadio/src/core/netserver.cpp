@@ -690,7 +690,7 @@ void NetServer::onWsMessage(void *arg, uint8_t *data, size_t len, uint8_t client
           return;
         }
       } /*  EOF RESETS  */
-      if (strcmp(cmd, "volume") == 0) {
+      if (strcmp(cmd, "volume") == 0) {//Установка уровня звука от веб
         uint8_t v = atoi(val);
         player.setVol(v);
       }
@@ -923,6 +923,7 @@ void handleHTTPArgs(AsyncWebServerRequest * request) {
       return;
     }
   }
+//POST/GET команды http://<yoradioip>/?command
   if (network.status == CONNECTED) {
     bool commandFound=false;
     if (request->hasArg("start")) { player.sendCommand({PR_PLAY, config.lastStation()}); commandFound=true; }

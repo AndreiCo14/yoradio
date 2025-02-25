@@ -311,18 +311,18 @@ void Config::reset(){
 void Config::setDefaults() {
   store.config_set = 4262;
   store.version = CONFIG_VERSION;
-  store.volume = 12;
-  store.balance = 0;
+  store.volume = 12;			//Уровень звука
+  store.balance = 0;			//Баланс
   store.trebble = 0;
   store.middle = 0;
   store.bass = 0;
-  store.lastStation = 0;
-  store.countStation = 0;
+  store.lastStation = 0;		//Последняя станция
+  store.countStation = 0;		//Всего станций
   store.lastSSID = 0;
   store.audioinfo = false;
   store.smartstart = 2;
-  store.tzHour = 3;
-  store.tzMin = 0;
+  store.tzHour = 3;			//Таймзона
+  store.tzMin = 0;			//Таймзона
   store.timezoneOffset = 0;
 
   store.vumeter=false;

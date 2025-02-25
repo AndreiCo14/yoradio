@@ -174,15 +174,15 @@ void encodersLoop(yoEncoder *enc, bool first){
       if(nv>254) nv=254;
       player.setVol((uint8_t)nv);					//изменяем звук
     }else{								//Если FALSE
-      if(encoderDelta > 0) player.next(); else player.prev();		//
+      if(encoderDelta > 0) player.next(); else player.prev();		//переключаем станцию сразу
     }
 #   else
     if(first){								//Если первый энкодер
       controlsEvent(encoderDelta > 0, encoderDelta);
     }else{								//Если второй энкодер
       if (encBtnState == HIGH && display.mode() == PLAYER) {		//кнопка не нажата и проигрывание
-        if(config.store.skipPlaylistUpDown){
-          if(encoderDelta > 0) player.next(); else player.prev();	//
+        if(config.store.skipPlaylistUpDown){				//Если включена опция переключать станцию по каждому щелчку
+          if(encoderDelta > 0) player.next(); else player.prev();	//переключаем станцию сразу
           return;
         }
         display.putRequest(NEWMODE, STATIONS);				//Дисплей в режим STATIONS
@@ -501,7 +501,7 @@ void onBtnClick(int id) {
           #endif
         }
         if (display.mode() == STATIONS) {				//Если станции
-          display.putRequest(NEWMODE, PLAYER);
+          display.putRequest(NEWMODE, PLAYER);				//Переключение режима на PLAYER
           #ifdef DSP_LCD
             delay(200);
           #endif
