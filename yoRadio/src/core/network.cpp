@@ -166,11 +166,11 @@ bool MyNetwork::wifiBegin(bool silent){
         break;
       }
     }
-    if (WiFi.status() != WL_CONNECTED && ls == startedls) {
+    if (WiFi.status() != WL_CONNECTED && ls == startedls) { //Если нет подключения и попробовали все SSID
       return false; break;
     }
     if (WiFi.status() == WL_CONNECTED) {
-      config.setLastSSID(ls + 1);
+      config.setLastSSID(ls + 1); //Сохранение последнего SSID к которому подключились
       return true; break;
     }
   }

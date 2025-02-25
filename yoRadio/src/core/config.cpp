@@ -224,7 +224,7 @@ void Config::initPlaylistMode(){
     _lastStation = getMode()==PM_WEB?1:_randomStation();
   }
   lastStation(_lastStation);
-  saveValue(&store.play_mode, store.play_mode, true, true);
+  saveValue(&store.play_mode, store.play_mode, true, true); //Принудительная запись play_mode в EEPROM (при каждой перезагрузке, инициализации). Зачем принудительная???
   _bootDone = true;
   loadStation(_lastStation);
 }
@@ -403,7 +403,7 @@ uint8_t Config::setVolume(uint8_t val) {
   return store.volume;
 }
 
-void Config::setTone(int8_t bass, int8_t middle, int8_t trebble) {
+void Config::setTone(int8_t bass, int8_t middle, int8_t trebble) { //Сохранить настройки эквалайзера в EEPROM
   saveValue(&store.bass, bass, false);
   saveValue(&store.middle, middle, false);
   saveValue(&store.trebble, trebble);
@@ -428,7 +428,7 @@ uint8_t Config::setCountStation(uint16_t val) {
 }
 
 uint8_t Config::setLastSSID(uint8_t val) {
-  saveValue(&store.lastSSID, val);
+  saveValue(&store.lastSSID, val); //Сохранение последнего SSID к которому подключились
   return store.lastSSID;
 }
 
@@ -474,7 +474,8 @@ void Config::initPlaylist() {
     File index = SPIFFS.open(INDEX_PATH, "r");
     store.countStation = index.size() / 4;
     index.close();
-    saveValue(&store.countStation, store.countStation, true, true);
+    saveValue(&store.countStation, store.countStation, true, true); //Принудительная запись количества станций в EEPROM (при каждой перезагрузке, инициализации). Зачем принудительная???
+    Serial.println("=save_countStation");
   }
 }
 
