@@ -110,8 +110,8 @@ struct config_t
   bool      dspon;//529
   uint8_t   brightness;//530
   uint8_t   contrast;//531
-  char      sntp1[35];//532-536
-  char      sntp2[35];//537-601
+  char      sntp1[35];//532-566
+  char      sntp2[35];//567-601
   bool      showweather;//602
   char      weatherlat[10];//603-612
   char      weatherlon[10];//613-622
