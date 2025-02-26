@@ -334,10 +334,10 @@ void NetServer::processQueue(){
                                   break;
       case DSPON:         sprintf (wsbuf, "{\"dspontrue\":%d}", 1); break;
       case STATION:       requestOnChange(STATIONNAME, clientId); requestOnChange(ITEM, clientId); break;
-      case STATIONNAME:   sprintf (wsbuf, "{\"nameset\": \"%s\"}", config.station.name); break;
+      case STATIONNAME:   sprintf (wsbuf, "{\"nameset\": \"%s\"}", config.station.name); break;//Имя станции
       case ITEM:          sprintf (wsbuf, "{\"current\": %d}", config.lastStation()); break;
-      case TITLE:         sprintf (wsbuf, "{\"meta\": \"%s\"}", config.station.title); telnet.printf("##CLI.META#: %s\n> ", config.station.title); break;
-      case VOLUME:        sprintf (wsbuf, "{\"vol\": %d}", config.store.volume); telnet.printf("##CLI.VOL#: %d\n", config.store.volume); break;
+      case TITLE:         sprintf (wsbuf, "{\"meta\": \"%s\"}", config.station.title); telnet.printf("##CLI.META#1#: %s\n> ", config.station.title); break;//Трек
+      case VOLUME:        sprintf (wsbuf, "{\"vol\": %d}", config.store.volume); telnet.printf("##CLI.VOL#: %d\n", config.store.volume); break;//Уровень звука
       case NRSSI:         sprintf (wsbuf, "{\"rssi\": %d}", rssi); /*rssi = 255;*/ break;
       case SDPOS:         sprintf (wsbuf, "{\"sdpos\": %d,\"sdend\": %d,\"sdtpos\": %d,\"sdtend\": %d}", 
                                   player.getFilePos(), 
@@ -577,7 +577,7 @@ void NetServer::onWsMessage(void *arg, uint8_t *data, size_t len, uint8_t client
         }
         if (tzdone) {
           network.forceTimeSync = true;
-          if (strlen(val) > 0
+          if (strlen(val) > 0)
           config.saveValue(config.store.sntp1, val, 35, true, true);//bug нужно принудительно записать
         }
         return;
@@ -590,7 +590,7 @@ void NetServer::onWsMessage(void *arg, uint8_t *data, size_t len, uint8_t client
       if (strcmp(cmd, "encacceleration") == 0) {
         uint16_t valb = atoi(val);
         setEncAcceleration(valb);
-        config.saveValue(&config.store.encacc, valb);
+//        config.saveValue(&config.store.encacc, valb);  //Дублирует строку в setEncAcceleration() в controls.cpp
         return;
       }
       if (strcmp(cmd, "irtlp") == 0) {

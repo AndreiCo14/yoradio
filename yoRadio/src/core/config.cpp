@@ -475,7 +475,6 @@ void Config::initPlaylist() {
     store.countStation = index.size() / 4;
     index.close();
     saveValue(&store.countStation, store.countStation, true, true); //Принудительная запись количества станций в EEPROM (при каждой перезагрузке, инициализации). Зачем принудительная???
-    Serial.println("=save_countStation");
   }
 }
 
