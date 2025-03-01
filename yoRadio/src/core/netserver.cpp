@@ -453,6 +453,11 @@ void NetServer::onWsMessage(void *arg, uint8_t *data, size_t len, uint8_t client
         ESP.restart();
         return;
       }
+      if (strcmp(cmd, "write_eeprom") == 0) {
+        config.saveSTORE();//Сохраняем в EEPROM все настройки
+Serial.println("=Write setting to EEPROM");
+        return;
+      }
       if (strcmp(cmd, "invertdisplay") == 0) {
         bool valb = static_cast<bool>(atoi(val));
         config.saveValue(&config.store.invertdisplay, valb);

@@ -392,7 +392,11 @@ void Config::saveIR(){
 }
 #endif
 
-void Config::saveVolume(){
+void Config::saveSTORE(){//Сохранение в EEPROM всех настроек
+  eepromWrite(EEPROM_START, store);
+}
+
+void Config::saveVolume(){ //сохранить уровень звука в EEPROM
   saveValue(&store.volume, store.volume, true, true);
 }
 
