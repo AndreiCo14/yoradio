@@ -193,6 +193,7 @@ class Config {
 #if IR_PIN!=255
     void saveIR();
 #endif
+void saveSTORE();//Сохранение в EEPROM всех настроек
     void init();
     void loadTheme();
     uint8_t setVolume(uint8_t val);
@@ -223,7 +224,7 @@ class Config {
     uint16_t lastStation(){
       return getMode()==PM_WEB?store.lastStation:store.lastSdStation;
     }
-    void lastStation(uint16_t newstation){
+    void lastStation(uint16_t newstation){				//Сохранение последней станции
       if(getMode()==PM_WEB) saveValue(&store.lastStation, newstation);
       else saveValue(&store.lastSdStation, newstation);
     }
