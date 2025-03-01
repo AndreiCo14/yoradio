@@ -253,21 +253,34 @@ void saveSTORE();//Сохранение в EEPROM всех настроек
     }
     template <typename T>
     void saveValue(T *field, const T &value, bool commit=true, bool force=false){			//Сохранение в EEPROM
-      if(*field == value && !force) return;
+Serial.print("=saveValue1 "); Serial.print(getAddr(field));
+//В оригинале все раскомментировано
+/*      if(*field == value && !force) {Serial.println(""); return;} //Если новое значение равно старому, то выходим
       *field = value;
       size_t address = getAddr(field);
-      EEPROM.put(address, value);
-      if(commit)
-        EEPROM.commit();
+//      EEPROM.put(address, value);
+Serial.print(" =WRITE "); Serial.print(value);
+      if(commit){
+//        EEPROM.commit();
+Serial.println(" =EEPROM.commit=1");
+      }*/
     }
-    void saveValue(char *field, const char *value, size_t N, bool commit=true, bool force=false) {	//Сохранение в EEPROM
-      if (strcmp(field, value) == 0 && !force) return;
+    void saveValue(char *field, const char *value, size_t N, bool commit=true, bool force=false) {	//Сохранение в EEPROM строк
+Serial.print("=saveValue2 "); Serial.print(getAddr(field)); //Serial.print(" "); Serial.print(field); Serial.print(" "); Serial.print(value);
+//В оригинале все раскомментировано
+/*      if (strcmp(field, value) == 0 && !force) {Serial.println(""); return;} //Если новое значение строки равно старому, то выходим
       strlcpy(field, value, N);
       size_t address = getAddr(field);
       size_t fieldlen = strlen(field);
-      for (size_t i = 0; i <=fieldlen ; i++) EEPROM.write(address + i, field[i]);
-      if(commit)
-        EEPROM.commit();
+Serial.print(" =WRITE ");
+      for (size_t i = 0; i <=fieldlen ; i++) {
+//        EEPROM.write(address + i, field[i]);
+Serial.print(field[i]);
+      }
+      if(commit){
+//        EEPROM.commit();
+Serial.println(" =EEPROM.commit=2");
+      }*/
     }
     uint32_t getChipId(){
       uint32_t chipId = 0;

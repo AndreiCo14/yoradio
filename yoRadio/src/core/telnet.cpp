@@ -26,7 +26,7 @@ bool Telnet::begin(bool quiet) {
     if(!quiet){
       Serial.println("done");
       Serial.println("##[BOOT]#");
-      BOOTLOG("Ready! Go to http:/%s/ to configure", WiFi.localIP().toString().c_str());
+      BOOTLOG("Ready! Go to http://%s/ to configure", WiFi.localIP().toString().c_str());
       BOOTLOG("------------------------------------------------");
       Serial.println("##[BOOT]#");
     }

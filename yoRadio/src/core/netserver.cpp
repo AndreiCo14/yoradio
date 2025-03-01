@@ -223,7 +223,7 @@ const char *getFormat(BitrateFormat _format) {
 }
 
 char wsbuf[BUFLEN * 2];
-void NetServer::processQueue(){
+void NetServer::processQueue(){//Отправка информации в WEB страницу???
   if(nsQueue==NULL) return;
   nsRequestParams_t request;
   if(xQueueReceive(nsQueue, &request, NS_QUEUE_TICKS)){
@@ -399,7 +399,7 @@ void NetServer::irValsToWs() {
 }
 #endif
 
-void NetServer::onWsMessage(void *arg, uint8_t *data, size_t len, uint8_t clientId) {
+void NetServer::onWsMessage(void *arg, uint8_t *data, size_t len, uint8_t clientId) {//Получение данных от WEB страниц
   AwsFrameInfo *info = (AwsFrameInfo*)arg;
   if (info->final && info->index == 0 && info->len == len && info->opcode == WS_TEXT) {
     data[len] = 0;
@@ -442,7 +442,7 @@ void NetServer::onWsMessage(void *arg, uint8_t *data, size_t len, uint8_t client
         config.saveValue(config.store.mdnsname, val, MDNS_LENGTH);
         return;
       }
-      if (strcmp(cmd, "rebootmdns") == 0) {
+      if (strcmp(cmd, "rebootmdns") == 0) {//Изменение mDNS name 
         char buf[MDNS_LENGTH*2];
         if(strlen(config.store.mdnsname)>0)
           snprintf(buf, MDNS_LENGTH*2, "{\"redirect\": \"http://%s.local\"}", config.store.mdnsname);
@@ -696,8 +696,9 @@ Serial.println("=Write setting to EEPROM");
           return;
         }
       } /*  EOF RESETS  */
-      if (strcmp(cmd, "volume") == 0) {//Установка уровня звука от веб
+      if (strcmp(cmd, "volume") == 0) {//Установка уровня звука (получение от WEB)
         uint8_t v = atoi(val);
+Serial.println("=volume");
         player.setVol(v);
       }
       if (strcmp(cmd, "sdpos") == 0) {

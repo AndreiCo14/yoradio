@@ -271,7 +271,7 @@ void MyNetwork::raiseSoftAP() {
   BOOTLOG("************************************************");
   BOOTLOG("Running in AP mode");
   BOOTLOG("Connect to AP %s with password %s", apSsid, apPassword);
-  BOOTLOG("and go to http:/192.168.4.1/ to configure");
+  BOOTLOG("and go to http://192.168.4.1/ to configure");
   BOOTLOG("************************************************");
   status = SOFT_AP;
   if(config.store.softapdelay>0)
