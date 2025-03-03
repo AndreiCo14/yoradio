@@ -495,7 +495,7 @@ void onBtnClick(int id) {
           player.toggle();						//Переключение плеера Play/Stop
         }
         if (display.mode() == SCREENSAVER || display.mode() == SCREENBLANK) {
-          display.putRequest(NEWMODE, PLAYER);				//Показать плеер
+          display.putRequest(NEWMODE, PLAYER);				//Переключение режима на PLAYER
           #ifdef DSP_LCD
             delay(200);
           #endif

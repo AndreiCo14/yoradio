@@ -25,6 +25,7 @@
 #define ENC2_BTNB			5
 #define ENC2_HALFQUARD			255
 #define IR_PIN			21
+#define L10N_LANGUAGE			RU
 
 
 #endif

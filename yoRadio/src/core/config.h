@@ -256,7 +256,7 @@ void saveSTORE();//Сохранение в EEPROM всех настроек
 Serial.print("=saveValue1 "); Serial.print(getAddr(field));
 //В оригинале все раскомментировано
 //      if(*field == value && !force) {Serial.println(""); return;} //Если новое значение равно старому, то выходим
-      *field = value;
+      *field = value;//Присвоение нового значения (должно быть, что бы обновлялись слайдеры эквалайзера и еще может что...)
 //      size_t address = getAddr(field);
 ///      EEPROM.put(address, value);
 //Serial.print(" =WRITE "); Serial.print(value);
@@ -269,7 +269,7 @@ Serial.print("=saveValue1 "); Serial.print(getAddr(field));
 Serial.print("=saveValue2 "); Serial.print(getAddr(field)); //Serial.print(" "); Serial.print(field); Serial.print(" "); Serial.print(value);
 //В оригинале все раскомментировано
 //      if (strcmp(field, value) == 0 && !force) {Serial.println(""); return;} //Если новое значение строки равно старому, то выходим
-      strlcpy(field, value, N);
+      strlcpy(field, value, N);//Присвоение нового значения (нужно ли???)
 //      size_t address = getAddr(field);
 //      size_t fieldlen = strlen(field);
 //Serial.print(" =WRITE ");
