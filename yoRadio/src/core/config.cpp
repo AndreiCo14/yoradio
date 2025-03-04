@@ -60,7 +60,7 @@ void Config::init() {
   eepromRead(EEPROM_START, store);
   bootInfo();
   
-  if (store.config_set != 4262) {
+  if (store.config_set != 1234) {
     setDefaults();
   }
   if(store.version>CONFIG_VERSION) store.version=1;
@@ -310,9 +310,9 @@ void Config::reset(){
 }
 
 void Config::setDefaults() {
-  store.config_set = 4262;
+  store.config_set = 1234;
   store.version = CONFIG_VERSION;
-  store.volume = 12;			//Уровень звука
+  store.volume = 3;			//Уровень звука
   store.balance = 0;			//Баланс
   store.trebble = 0;
   store.middle = 0;
@@ -366,6 +366,8 @@ void Config::setDefaults() {
   store.skipPlaylistUpDown = false;
   store.screensaverPlayingEnabled = false;
   store.screensaverPlayingTimeout = 5;
+  strlcpy(store.sch_on,"07:00", 6);//Время включения
+  strlcpy(store.sch_off,"07:00", 6);//Время выключения
   eepromWrite(EEPROM_START, store);
 }
 
