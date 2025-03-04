@@ -244,7 +244,7 @@ void NetServer::processQueue(){//Отправка информации в WEB с
         }
         getPlaylist(clientId); break;
       }
-      case GETACTIVE: {
+      case GETACTIVE: {//Определение активных (не скрытых) элементов WEB страниц
           bool dbgact = false, nxtn=false;
           String act = F("\"group_wifi\",");
           if (network.status == CONNECTED) {
@@ -271,7 +271,7 @@ void NetServer::processQueue(){//Отправка информации в WEB с
             if (ENC_BTNL != 255 || ENC2_BTNL != 255 || dbgact)  act += F("\"group_encoder\",");
             if (IR_PIN != 255 || dbgact)                        act += F("\"group_ir\",");
           }
-                                                                act = act.substring(0, act.length() - 1);
+                                                                act = act.substring(0, act.length() - 1);//Отбрасывание последней ","
           sprintf (wsbuf, "{\"act\":[%s]}", act.c_str());
           break;
         }
@@ -290,7 +290,15 @@ void NetServer::processQueue(){//Отправка информации в WEB с
           return; 
           break;
         }
-      case GETSYSTEM:     sprintf (wsbuf, "{\"sst\":%d,\"aif\":%d,\"vu\":%d,\"softr\":%d,\"vut\":%d,\"mdns\":\"%s\"}", 
+        //Расписание в WEB
+        case GETSCHEDULE:   sprintf (wsbuf, "{\"sch_on\":\"%s\",\"sch_off\":\"%s\",\"sch_sta\":%d,\"sch_vol\":%d}", 
+                                  config.store.sch_on, 
+                                  config.store.sch_off,
+                                  config.store.sch_sta,
+                                  config.store.sch_vol);
+                                  break;
+
+        case GETSYSTEM:     sprintf (wsbuf, "{\"sst\":%d,\"aif\":%d,\"vu\":%d,\"softr\":%d,\"vut\":%d,\"mdns\":\"%s\"}", 
                                   config.store.smartstart != 2, 
                                   config.store.audioinfo, 
                                   config.store.vumeter, 
@@ -358,7 +366,7 @@ void NetServer::processQueue(){//Отправка информации в WEB с
       #endif
       default:          break;
     }
-    if (strlen(wsbuf) > 0) {
+    if (strlen(wsbuf) > 0) {//Отправка
       if (clientId == 0) { websocket.textAll(wsbuf); }else{ websocket.text(clientId, wsbuf); }
   #ifdef MQTT_ROOT_TOPIC
       if (clientId == 0 && (request.type == STATION || request.type == ITEM || request.type == TITLE || request.type == MODE)) mqttPublishStatus();
@@ -405,8 +413,10 @@ void NetServer::onWsMessage(void *arg, uint8_t *data, size_t len, uint8_t client
     data[len] = 0;
     char cmd[65], val[65];
     if (config.parseWsCommand((const char*)data, cmd, val, 65)) {
+Serial.print("=cmd: "); Serial.print(cmd); Serial.print(" val: "); Serial.println(val);
       if (strcmp(cmd, "getmode") == 0     ) { requestOnChange(GETMODE, clientId);     return; }
       if (strcmp(cmd, "getindex") == 0    ) { requestOnChange(GETINDEX, clientId);    return; }
+      if (strcmp(cmd, "getschedule") == 0   ) { requestOnChange(GETSCHEDULE, clientId);   return; }//Если получен запрос getschedule
       if (strcmp(cmd, "getsystem") == 0   ) { requestOnChange(GETSYSTEM, clientId);   return; }
       if (strcmp(cmd, "getscreen") == 0   ) { requestOnChange(GETSCREEN, clientId);   return; }
       if (strcmp(cmd, "gettimezone") == 0 ) { requestOnChange(GETTIMEZONE, clientId); return; }
@@ -628,6 +638,24 @@ Serial.println("=Write setting to EEPROM");
         config.saveValue(config.store.weatherkey, val, WEATHERKEY_LENGTH);
         network.trueWeather=false;
         display.putRequest(NEWMODE, CLEAR); display.putRequest(NEWMODE, PLAYER);
+        return;
+      }
+      if (strcmp(cmd, "sch_on") == 0) {//Расписание
+        config.saveValue(config.store.sch_on, val, 6, false);
+        return;
+      }
+      if (strcmp(cmd, "sch_off") == 0) {//Расписание
+        config.saveValue(config.store.sch_off, val, 6);
+        return;
+      }
+      if (strcmp(cmd, "sch_sta") == 0) {//Расписание
+        uint8_t valb = atoi(val);
+        config.saveValue(&config.store.sch_sta, valb);
+        return;
+      }
+      if (strcmp(cmd, "sch_vol") == 0) {//Расписание
+        uint8_t valb = atoi(val);
+        config.saveValue(&config.store.sch_vol, valb);
         return;
       }
       /*  RESETS  */

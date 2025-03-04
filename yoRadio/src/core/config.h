@@ -142,6 +142,10 @@ struct config_t
   bool      screensaverPlayingBlank;//714
   char      mdnsname[24];//738
   bool      skipPlaylistUpDown;//739
+  char      sch_on[6];
+  char      sch_off[6];
+  uint8_t   sch_sta;
+  uint8_t   sch_vol;
 };
 
 #if IR_PIN!=255
@@ -253,7 +257,7 @@ void saveSTORE();//Сохранение в EEPROM всех настроек
     }
     template <typename T>
     void saveValue(T *field, const T &value, bool commit=true, bool force=false){			//Сохранение в EEPROM
-Serial.print("=saveValue1 "); Serial.print(getAddr(field));
+Serial.print("=saveValue1 "); Serial.println(getAddr(field));
 //В оригинале все раскомментировано
 //      if(*field == value && !force) {Serial.println(""); return;} //Если новое значение равно старому, то выходим
       *field = value;//Присвоение нового значения (должно быть, что бы обновлялись слайдеры эквалайзера и еще может что...)
@@ -266,7 +270,7 @@ Serial.print("=saveValue1 "); Serial.print(getAddr(field));
 //      }
     }
     void saveValue(char *field, const char *value, size_t N, bool commit=true, bool force=false) {	//Сохранение в EEPROM строк
-Serial.print("=saveValue2 "); Serial.print(getAddr(field)); //Serial.print(" "); Serial.print(field); Serial.print(" "); Serial.print(value);
+Serial.print("=saveValue2 "); Serial.println(getAddr(field)); //Serial.print(" "); Serial.print(field); Serial.print(" "); Serial.print(value);
 //В оригинале все раскомментировано
 //      if (strcmp(field, value) == 0 && !force) {Serial.println(""); return;} //Если новое значение строки равно старому, то выходим
       strlcpy(field, value, N);//Присвоение нового значения (нужно ли???)

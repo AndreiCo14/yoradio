@@ -19,7 +19,41 @@ TaskHandle_t syncTaskHandle;
 bool getWeather(char *wstr);
 void doSync(void * pvParameters);
 
-void ticks() {
+void ticks() {//Один раз в секунду
+
+  //Включение/Выключение по расписанию
+  char sch_on_h[3], sch_on_m[3], sch_off_h[3], sch_off_m[3];
+  strncpy(sch_on_h, config.store.sch_on, 2);
+  strncpy(sch_on_m, config.store.sch_on + 3, 2);
+  strncpy(sch_off_h, config.store.sch_off, 2);
+  strncpy(sch_off_m, config.store.sch_off + 3, 2);
+  int sch_pl=atoi(sch_on_h)*60+atoi(sch_on_m);
+  int sch_st=atoi(sch_off_h)*60+atoi(sch_off_m);
+  if(sch_pl != sch_st){//Если время не равны
+    if (sch_pl == network.timeinfo.tm_hour*60+network.timeinfo.tm_min){//Пришло время Play
+      if (config.store.sch_sta == 0 || config.store.sch_sta == config.lastStation()){
+        if (player.status() == STOPPED) {player.sendCommand({PR_PLAY, config.lastStation()}); Serial.println("=*Playl");}
+      }
+      else
+      if(config.store.sch_sta != config.lastStation()) {player.sendCommand({PR_PLAY, config.store.sch_sta}); Serial.println("=*Play");}
+      player.sendCommand({PR_VOL, config.store.sch_vol});//Устанавливаем уровень звука
+//      Serial.println(config.lastStation());
+//      Serial.println(config.store.sch_sta);
+//      Serial.println(config.store.sch_vol);
+    }
+    if(player.status() == PLAYING && sch_st == network.timeinfo.tm_hour*60+network.timeinfo.tm_min){//Пришло время Stop
+      player.sendCommand({PR_STOP, 0});
+//      player.sendCommand({PR_VOL, config.store.volume});//Устанавливаем уровень звука по умолчанию
+      Serial.println("=*Stop");
+//      Serial.println(config.store.volume);
+    }
+  }
+//  Serial.println(player.status());
+//  Serial.print(network.timeinfo.tm_hour); Serial.print(network.timeinfo.tm_min); Serial.println(network.timeinfo.tm_sec);
+//  Serial.println(sch_pl);
+//  Serial.println(sch_st);
+
+  
   if(!display.ready()) return; //waiting for SD is ready
   pm.on_ticker();
   static const uint16_t weatherSyncInterval=1800;
@@ -40,33 +74,33 @@ void ticks() {
     if(network.forceTimeSync || network.forceWeather){
       xTaskCreatePinnedToCore(doSync, "doSync", 1024 * 4, NULL, 0, &syncTaskHandle, 0);
     }
-    if(timeSyncTicks >= timeSyncInterval){
+    if(timeSyncTicks >= timeSyncInterval){//Синхронизация времени
       timeSyncTicks=0;
       network.forceTimeSync = true;
     }
-    if(weatherSyncTicks >= weatherSyncInterval){
+    if(weatherSyncTicks >= weatherSyncInterval){//Синхронизация погоды
       weatherSyncTicks=0;
       network.forceWeather = true;
     }
   }
 #ifndef DSP_LCD
-  if(config.store.screensaverEnabled && display.mode()==PLAYER && !player.isRunning()){
+  if(config.store.screensaverEnabled && display.mode()==PLAYER && !player.isRunning()){//При НЕпроигрывании
     config.screensaverTicks++;
-    if(config.screensaverTicks > config.store.screensaverTimeout+SCREENSAVERSTARTUPDELAY){
+    if(config.screensaverTicks > config.store.screensaverTimeout+SCREENSAVERSTARTUPDELAY){//Таймаут blank screen
       if(config.store.screensaverBlank){
-        display.putRequest(NEWMODE, SCREENBLANK);
+        display.putRequest(NEWMODE, SCREENBLANK);//Пустой экран
       }else{
-        display.putRequest(NEWMODE, SCREENSAVER);
+        display.putRequest(NEWMODE, SCREENSAVER);//Скринсейвер
       }
     }
   }
-  if(config.store.screensaverPlayingEnabled && display.mode()==PLAYER && player.isRunning()){
+  if(config.store.screensaverPlayingEnabled && display.mode()==PLAYER && player.isRunning()){//При проигрывании
     config.screensaverPlayingTicks++;
-    if(config.screensaverPlayingTicks > config.store.screensaverPlayingTimeout*60+SCREENSAVERSTARTUPDELAY){
+    if(config.screensaverPlayingTicks > config.store.screensaverPlayingTimeout*60+SCREENSAVERSTARTUPDELAY){//Таймаут blank screen
       if(config.store.screensaverPlayingBlank){
-        display.putRequest(NEWMODE, SCREENBLANK);
+        display.putRequest(NEWMODE, SCREENBLANK);//Пустой экран
       }else{
-        display.putRequest(NEWMODE, SCREENSAVER);
+        display.putRequest(NEWMODE, SCREENSAVER);//Скринсейвер
       }
     }
   }
