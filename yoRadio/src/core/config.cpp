@@ -60,7 +60,7 @@ void Config::init() {
   eepromRead(EEPROM_START, store);
   bootInfo();
   
-  if (store.config_set != 250305) {
+  if (store.config_set != 0305) {
     setDefaults();
   }
   if(store.version>CONFIG_VERSION) store.version=1;
@@ -310,7 +310,7 @@ void Config::reset(){
 }
 
 void Config::setDefaults() {
-  store.config_set = 250305;
+  store.config_set = 0305;
   store.version = CONFIG_VERSION;
   store.volume = 3;			//Уровень звука
   store.balance = 0;			//Баланс

@@ -257,7 +257,7 @@ void saveSTORE();//Сохранение в EEPROM всех настроек
     }
     template <typename T>
     void saveValue(T *field, const T &value, bool commit=true, bool force=false){			//Сохранение в EEPROM
-Serial.print("=saveValue1 "); Serial.println(getAddr(field));
+Serial.print("=saveValue1 "); Serial.print(getAddr(field)); Serial.print(" "); Serial.println(value);
 //В оригинале все раскомментировано
 //      if(*field == value && !force) {Serial.println(""); return;} //Если новое значение равно старому, то выходим
       *field = value;//Присвоение нового значения (должно быть, что бы обновлялись слайдеры эквалайзера и еще может что...)
