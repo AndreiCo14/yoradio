@@ -57,7 +57,6 @@ void Player::init() {
   setVolume(0);
   _status = STOPPED;
   //setOutputPins(false);
-  _volTimer=false;
   //randomSeed(analogRead(0));
   #if PLAYER_FORCE_MONO
     forceMono(true);
@@ -168,6 +167,16 @@ void Player::loop() {
     if((millis()-_volTicks)>3000){				//Через 3 секунды
       config.saveVolume();					//вызов функции сохранить уровень звука в EEPROM в config.cpp
       _volTimer=false;
+    }
+  }
+  if(_staTimer){
+    if((millis()-_staTicks)>2000){				//Через 3 секунды
+      if (display.mode() == NUMBERS) {
+        display.putRequest(NEWMODE, PLAYER);
+        player.sendCommand({PR_PLAY, display.numOfNextStation});	//Запуск станции по номеру (пульт)
+        display.numOfNextStation = 0;
+      }
+      _staTimer=false;
     }
   }
 #ifdef MQTT_ROOT_TOPIC

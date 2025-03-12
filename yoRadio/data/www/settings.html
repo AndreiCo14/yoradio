@@ -23,7 +23,10 @@
       <div class="navitem group group_wifi hidden" data-target="group_wifi">wifi</div>
       <div class="navitem group group_weather hidden" data-target="group_weather">weather</div>
     </div>
-    <div class="button apply hlbutton" data-name="write_eeprom" style=" margin-top: 4px; margin-bottom: 8px; height: 37px;">save to eeprom</div>
+    <div class="flex-row last">
+    <div class="button apply hlbutton" data-name="write_eeprom">save to eeprom</div>
+    <div class="button apply" data-name="settingsdone" id="settingsdone">back</div>
+    </div>
     <div class="playerwrap">
       <div class="settingsirwrap" id="settingscontent">
         
@@ -36,11 +39,11 @@
           <div class="flex-row credential">
             <div class="inputwrap">
               <span class="inputtitle">sch_on</span>
-              <input type="text" id="sch_on" class="textinput" name="sch_on" value="" placeholder="00:00" maxlength="5" autocomplete="off" />
+              <input type="time" id="sch_on" class="textinput" name="sch_on" value="" placeholder="00:00" maxlength="5" autocomplete="off" />
             </div>
             <div class="inputwrap">
               <span class="inputtitle">sch_off</span>
-              <input type="text" id="sch_off" class="textinput" name="sch_off" value="" placeholder="00:00" maxlength="5" autocomplete="off"/>
+              <input type="time" id="sch_off" class="textinput" name="sch_off" value="" placeholder="00:00" maxlength="5" autocomplete="off"/>
             </div>
             <div class="inputwrap">
               <span class="inputtitle">station</span>
@@ -289,7 +292,6 @@
         <div class="hr">&nbsp;</div>
       </div>
     </div><!--playerwrap-->
-    <div class="button apply done group group_system hidden" data-name="settingsdone" id="settingsdone">done</div>
     <div id="copy">powered by <a target="_blank" href="https://github.com/e2002/yoradio/">ёRadio</a> | v%VERSION%</div>
   </div>
   <script src="script.js?%VERSION%"></script>

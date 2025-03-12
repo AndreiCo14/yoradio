@@ -220,13 +220,15 @@ void irBlink() {
 
 void irNumber(uint8_t num) {
   uint16_t s;
+  player._staTicks = millis();						//Запоминаем время
+  player._staTimer = true;						//Флаг запуска таймера для переключения станции
   if (display.numOfNextStation == 0 && num == 0) return;
   display.putRequest(NEWMODE, NUMBERS);
   if (display.numOfNextStation > UINT16_MAX / 10) return;
   s = display.numOfNextStation * 10 + num;
   if (s > config.store.countStation) return;
   display.numOfNextStation = s;
-  display.putRequest(NEXTSTATION, s);
+  display.putRequest(NEXTSTATION, s);//Отображаем номер
 }
 
 void irLoop() {

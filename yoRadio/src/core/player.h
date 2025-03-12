@@ -31,7 +31,7 @@ enum plStatus_e : uint8_t{ PLAYING = 1, STOPPED = 2 };
 class Player: public Audio {
   private:
     uint32_t    _volTicks;   /* delayed volume save  */
-    bool        _volTimer;   /* delayed volume save  */
+    bool        _volTimer = false;   /* delayed volume save  */
     uint32_t    _resumeFilePos;
     plStatus_e  _status;
     char        _plError[PLERR_LN];
@@ -40,6 +40,8 @@ class Player: public Audio {
     void _play(uint16_t stationId);
     void _loadVol(uint8_t volume);
   public:
+    uint32_t    _staTicks;   /* Задержка переключения станции от ИК  */
+    bool        _staTimer = false;   /* Задержка переключения станции от ИК  */
     bool lockOutput = true;
     bool resumeAfterUrl = false;
     uint32_t sd_min, sd_max;

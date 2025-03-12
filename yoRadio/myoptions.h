@@ -11,6 +11,7 @@
 
 /* !!! Do not be alarmed, all right, the default values ​​are not included in this file !!! */
 
+#define L10N_LANGUAGE			RU
 #define DSP_MODEL			DSP_ST7789
 #define TFT_DC			14
 #define TFT_CS			13
@@ -24,8 +25,8 @@
 #define ENC2_BTNL			16
 #define ENC2_BTNB			5
 #define ENC2_HALFQUARD			255
+#define ENC2_INTERNALPULLUP			true
 #define IR_PIN			21
-#define L10N_LANGUAGE			RU
 
 
 #endif
