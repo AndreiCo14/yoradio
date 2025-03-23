@@ -717,7 +717,7 @@ void Config::setBrightness(bool dosave){
     display.wakeup();
   }
   analogWrite(BRIGHTNESS_PIN, map(store.brightness, 0, 100, 0, 255));
-  if(!store.dspon) store.dspon = true;
+  store.dspon = true;
   if(dosave){
     saveValue(&store.brightness, store.brightness, false, true);
     saveValue(&store.dspon, store.dspon, true, true);
@@ -728,7 +728,7 @@ void Config::setBrightness(bool dosave){
   char cmd[15];
   snprintf(cmd, 15, "dims=%d", store.brightness);
   nextion.putcmd(cmd);
-  if(!store.dspon) store.dspon = true;
+  store.dspon = true;
   if(dosave){
     saveValue(&store.brightness, store.brightness, false, true);
     saveValue(&store.dspon, store.dspon, true, true);
@@ -747,13 +747,13 @@ void Config::setDspOn(bool dspon, bool saveval){
 #endif
   if(!dspon){
 #if BRIGHTNESS_PIN!=255
-  analogWrite(BRIGHTNESS_PIN, 0);
+  analogWrite(BRIGHTNESS_PIN, 0);//Выкл подсветку
 #endif
     display.deepsleep();
   }else{
     display.wakeup();
 #if BRIGHTNESS_PIN!=255
-  analogWrite(BRIGHTNESS_PIN, map(store.brightness, 0, 100, 0, 255));
+  analogWrite(BRIGHTNESS_PIN, map(store.brightness, 0, 100, 0, 255));//Вкл подсветку
 #endif
   }
 }

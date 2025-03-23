@@ -505,7 +505,7 @@ Serial.println("=Write setting to EEPROM");
         config.setBrightness(true);
         return;
       }
-      if (strcmp(cmd, "screenon") == 0) {
+      if (strcmp(cmd, "screenon") == 0) {//on/off дисплей
         bool valb = static_cast<bool>(atoi(val));
         config.setDspOn(valb);
         return;

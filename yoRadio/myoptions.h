@@ -13,20 +13,22 @@
 
 #define L10N_LANGUAGE			RU
 #define DSP_MODEL			DSP_ST7789
+#define BRIGHTNESS_PIN			12
 #define TFT_DC			14
 #define TFT_CS			13
-#define TFT_RST			2
+#define TFT_RST			-1
 #define I2S_DOUT			255
-#define VS1053_CS			32
-#define VS1053_DCS			33
-#define VS1053_DREQ			34
+#define VS1053_CS			27
+#define VS1053_DCS			25
+#define VS1053_DREQ			26
 #define VS1053_RST			-1
-#define ENC2_BTNR			17
-#define ENC2_BTNL			16
-#define ENC2_BTNB			5
+#define ENC2_BTNR			35
+#define ENC2_BTNL			33
+#define ENC2_BTNB			32
 #define ENC2_HALFQUARD			255
 #define ENC2_INTERNALPULLUP			true
 #define IR_PIN			21
-
+#define MUTE_PIN			4
+#define MUTE_VAL			LOW
 
 #endif

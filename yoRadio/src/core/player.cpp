@@ -170,7 +170,7 @@ void Player::loop() {
     }
   }
   if(_staTimer){
-    if((millis()-_staTicks)>2000){				//Через 3 секунды
+    if((millis()-_staTicks)>2000){				//Через 2 секунды
       if (display.mode() == NUMBERS) {
         display.putRequest(NEWMODE, PLAYER);
         player.sendCommand({PR_PLAY, display.numOfNextStation});	//Запуск станции по номеру (пульт)
