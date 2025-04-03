@@ -10,7 +10,7 @@
 #include "rtcsupport.h"
 #include "../pluginsManager/pluginsManager.h"
 
-#define EEPROM_SIZE       780 //768
+#define EEPROM_SIZE       780 //768 //Расписание
 #define EEPROM_START      500
 #define EEPROM_START_IR   0
 #define EEPROM_START_2    10
