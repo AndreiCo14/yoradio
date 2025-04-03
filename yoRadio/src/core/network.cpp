@@ -23,13 +23,15 @@ void ticks() {//Один раз в секунду
 
   //Расписание Включение/Выключение по расписанию
   char sch_on_h[3], sch_on_m[3], sch_off_h[3], sch_off_m[3];
+  int sch_pl, sch_st;
   strncpy(sch_on_h, config.store.sch_on, 2);
   strncpy(sch_on_m, config.store.sch_on + 3, 2);
   strncpy(sch_off_h, config.store.sch_off, 2);
   strncpy(sch_off_m, config.store.sch_off + 3, 2);
-  int sch_pl=atoi(sch_on_h)*60+atoi(sch_on_m);
-  int sch_st=atoi(sch_off_h)*60+atoi(sch_off_m);
-  if(sch_pl != sch_st){//Если время не равны
+  sch_pl=atoi(sch_on_h)*60+atoi(sch_on_m);
+  sch_st=atoi(sch_off_h)*60+atoi(sch_off_m);
+     //Вс - 0, Пн - 1 ...
+  if(config.store.sch_dow1 >> (6-network.timeinfo.tm_wday) & 1 && sch_pl != sch_st && network.timeinfo.tm_sec < 3){//Если время не равны и первые 3 сек минуты
     if (sch_pl == network.timeinfo.tm_hour*60+network.timeinfo.tm_min){//Пришло время Play
       if (config.store.sch_sta == 0 || config.store.sch_sta == config.lastStation()){
         if (player.status() == STOPPED) {player.sendCommand({PR_PLAY, config.lastStation()}); Serial.println("=*Playl");}
@@ -53,7 +55,28 @@ void ticks() {//Один раз в секунду
 //  Serial.println(sch_pl);
 //  Serial.println(sch_st);
 
-  
+  //Расписание 2
+  strncpy(sch_on_h, config.store.sch_on2, 2);
+  strncpy(sch_on_m, config.store.sch_on2 + 3, 2);
+  strncpy(sch_off_h, config.store.sch_off2, 2);
+  strncpy(sch_off_m, config.store.sch_off2 + 3, 2);
+  sch_pl=atoi(sch_on_h)*60+atoi(sch_on_m);
+  sch_st=atoi(sch_off_h)*60+atoi(sch_off_m);
+  if(config.store.sch_dow2 >> (6-network.timeinfo.tm_wday) & 1 && sch_pl != sch_st && network.timeinfo.tm_sec < 3){//Если время не равны и первые 3 сек минуты
+    if (sch_pl == network.timeinfo.tm_hour*60+network.timeinfo.tm_min){//Пришло время Play
+      if (config.store.sch_sta2 == 0 || config.store.sch_sta2 == config.lastStation()){
+        if (player.status() == STOPPED) {player.sendCommand({PR_PLAY, config.lastStation()}); Serial.println("=*Playl");}
+      }
+      else
+      if(config.store.sch_sta2 != config.lastStation()) {player.sendCommand({PR_PLAY, config.store.sch_sta2}); Serial.println("=*Play");}
+      player.sendCommand({PR_VOL, config.store.sch_vol2});//Устанавливаем уровень звука 2
+    }
+    if(player.status() == PLAYING && sch_st == network.timeinfo.tm_hour*60+network.timeinfo.tm_min){//Пришло время Stop
+      player.sendCommand({PR_STOP, 0});
+      Serial.println("=*Stop");
+    }
+  }
+
   if(!display.ready()) return; //waiting for SD is ready
   pm.on_ticker();
   static const uint16_t weatherSyncInterval=1800;

@@ -290,12 +290,18 @@ void NetServer::processQueue(){//Отправка информации в WEB с
           return; 
           break;
         }
-        //Расписание в WEB
-        case GETSCHEDULE:   sprintf (wsbuf, "{\"sch_on\":\"%s\",\"sch_off\":\"%s\",\"sch_sta\":%d,\"sch_vol\":%d}", 
+        //Расписание отправка в WEB           1111111111111111111111111111111111111111111111111111111111111111111111111111111111 22222222222222222222222222222222222222222222222222222222222222222222222222222222222222
+        case GETSCHEDULE:   sprintf (wsbuf, "{\"sch_on\":\"%s\",\"sch_off\":\"%s\",\"sch_sta\":%d,\"sch_vol\":%d,\"sch_dow1\":%d,\"sch_on2\":\"%s\",\"sch_off2\":\"%s\",\"sch_sta2\":%d,\"sch_vol2\":%d,\"sch_dow2\":%d}", 
                                   config.store.sch_on, 
                                   config.store.sch_off,
                                   config.store.sch_sta,
-                                  config.store.sch_vol);
+                                  config.store.sch_vol,
+                                  config.store.sch_dow1,
+                                  config.store.sch_on2, 
+                                  config.store.sch_off2,
+                                  config.store.sch_sta2,
+                                  config.store.sch_vol2,
+                                  config.store.sch_dow2);
                                   break;
 
         case GETSYSTEM:     sprintf (wsbuf, "{\"sst\":%d,\"aif\":%d,\"vu\":%d,\"softr\":%d,\"vut\":%d,\"mdns\":\"%s\"}", 
@@ -640,24 +646,19 @@ Serial.println("=Write setting to EEPROM");
         display.putRequest(NEWMODE, CLEAR); display.putRequest(NEWMODE, PLAYER);
         return;
       }
-      if (strcmp(cmd, "sch_on") == 0) {//Расписание
-        config.saveValue(config.store.sch_on, val, 6, false);
-        return;
-      }
-      if (strcmp(cmd, "sch_off") == 0) {//Расписание
-        config.saveValue(config.store.sch_off, val, 6);
-        return;
-      }
-      if (strcmp(cmd, "sch_sta") == 0) {//Расписание
-        uint8_t valb = atoi(val);
-        config.saveValue(&config.store.sch_sta, valb);
-        return;
-      }
-      if (strcmp(cmd, "sch_vol") == 0) {//Расписание
-        uint8_t valb = atoi(val);
-        config.saveValue(&config.store.sch_vol, valb);
-        return;
-      }
+      //Расписание 1
+      if (strcmp(cmd, "sch_on") == 0) {config.saveValue(config.store.sch_on, val, 6, false); return;}//Вкл
+      if (strcmp(cmd, "sch_off") == 0) {config.saveValue(config.store.sch_off, val, 6); return;}//Выкл
+      if (strcmp(cmd, "sch_sta") == 0) {uint8_t valb = atoi(val); config.saveValue(&config.store.sch_sta, valb); return;}//Станция
+      if (strcmp(cmd, "sch_vol") == 0) {uint8_t valb = atoi(val); config.saveValue(&config.store.sch_vol, valb); return;}//Уровень звука
+      if (strcmp(cmd, "sch_dow1") == 0) {uint8_t valb = atoi(val); config.saveValue(&config.store.sch_dow1, valb); return;}//Расписание дни недели
+      //Расписание 2
+      if (strcmp(cmd, "sch_on2") == 0) {config.saveValue(config.store.sch_on2, val, 6, false); return;}
+      if (strcmp(cmd, "sch_off2") == 0) {config.saveValue(config.store.sch_off2, val, 6); return;}
+      if (strcmp(cmd, "sch_sta2") == 0) {uint8_t valb = atoi(val); config.saveValue(&config.store.sch_sta2, valb); return;}
+      if (strcmp(cmd, "sch_vol2") == 0) {uint8_t valb = atoi(val); config.saveValue(&config.store.sch_vol2, valb); return;}
+      if (strcmp(cmd, "sch_dow2") == 0) {uint8_t valb = atoi(val); config.saveValue(&config.store.sch_dow2, valb); return;}
+      
       /*  RESETS  */
       if (strcmp(cmd, "reset") == 0) {
         if (strcmp(val, "system") == 0) {

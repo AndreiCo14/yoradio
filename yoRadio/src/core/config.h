@@ -10,7 +10,7 @@
 #include "rtcsupport.h"
 #include "../pluginsManager/pluginsManager.h"
 
-#define EEPROM_SIZE       768
+#define EEPROM_SIZE       780 //768
 #define EEPROM_START      500
 #define EEPROM_START_IR   0
 #define EEPROM_START_2    10
@@ -142,10 +142,18 @@ struct config_t
   bool      screensaverPlayingBlank;//714
   char      mdnsname[24];//715-738
   bool      skipPlaylistUpDown;//739
-  char      sch_on[6];
-  char      sch_off[6];
-  uint8_t   sch_sta;
-  uint8_t   sch_vol;
+  // Расписание 1
+  char      sch_on[6];//740-745
+  char      sch_off[6];//746-751
+  uint8_t   sch_sta;//752
+  uint8_t   sch_vol;//753
+  uint8_t   sch_dow1;//754
+  // Расписание 2
+  char      sch_on2[6];//755-760
+  char      sch_off2[6];//761-766
+  uint8_t   sch_sta2;//767
+  uint8_t   sch_vol2;//768
+  uint8_t   sch_dow2;//769
 };
 
 #if IR_PIN!=255

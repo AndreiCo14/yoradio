@@ -366,10 +366,18 @@ void Config::setDefaults() {
   store.skipPlaylistUpDown = false;
   store.screensaverPlayingEnabled = false;
   store.screensaverPlayingTimeout = 5;
+  //Расписание 1
   strlcpy(store.sch_on,"07:00", 6);//Время включения
   strlcpy(store.sch_off,"07:00", 6);//Время выключения
   store.sch_sta = 0;
   store.sch_vol = 3;
+  store.sch_dow1 = 0b00111110;//0, вс, пн...
+  //Расписание 2
+  strlcpy(store.sch_on2,"07:00", 6);//Время включения
+  strlcpy(store.sch_off2,"07:00", 6);//Время выключения
+  store.sch_sta2 = 0;
+  store.sch_vol2 = 3;
+  store.sch_dow2 = 0b00111110;//0, вс, пн...
   eepromWrite(EEPROM_START, store);
 }
 
