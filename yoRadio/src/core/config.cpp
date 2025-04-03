@@ -60,7 +60,7 @@ void Config::init() {
   eepromRead(EEPROM_START, store);
   bootInfo();
   
-  if (store.config_set != 0305) {
+  if (store.config_set != 0304) {//Заменить число здесь и ниже 313 строка
     setDefaults();
   }
   if(store.version>CONFIG_VERSION) store.version=1;
@@ -310,7 +310,7 @@ void Config::reset(){
 }
 
 void Config::setDefaults() {
-  store.config_set = 0305;
+  store.config_set = 0304;//Изменить число здесь и выше 63 строка
   store.version = CONFIG_VERSION;
   store.volume = 3;			//Уровень звука
   store.balance = 0;			//Баланс
@@ -320,7 +320,7 @@ void Config::setDefaults() {
   store.lastStation = 0;		//Последняя станция
   store.countStation = 0;		//Всего станций
   store.lastSSID = 0;
-  store.audioinfo = false;
+  store.audioinfo = true; //
   store.smartstart = 2;
   store.tzHour = 3;			//Таймзона
   store.tzMin = 0;			//Таймзона
@@ -334,7 +334,7 @@ void Config::setDefaults() {
   store.fliptouch=false;
   store.dbgtouch=false;
   store.dspon=true;
-  store.brightness=100;
+  store.brightness=33;//
   store.contrast=55;
   strlcpy(store.sntp1,"pool.ntp.org", 35);
   strlcpy(store.sntp2,"1.ru.pool.ntp.org", 35);
@@ -360,7 +360,7 @@ void Config::setDefaults() {
   store.forcemono = false;
   store.i2sinternal = false;
   store.rotate90 = false;
-  store.screensaverEnabled = false;
+  store.screensaverEnabled = true;//Скринсейвер при паузе
   store.screensaverTimeout = 20;
   snprintf(store.mdnsname, MDNS_LENGTH, "yoradio-%x", getChipId());
   store.skipPlaylistUpDown = false;

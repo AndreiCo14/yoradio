@@ -85,7 +85,7 @@ struct theme_t {
 };
 struct config_t
 {                                      //адреса EEPROM
-  uint16_t  config_set; //must be 4262 //500
+  uint16_t  config_set;//500 //номер конфигурации для проверки для сброса по-умолчанию
   uint16_t  version;//502
   uint8_t   volume;//504
   int8_t    balance;//505
@@ -135,12 +135,12 @@ struct config_t
   bool      i2sinternal;//705
   bool      rotate90;//706
   bool      screensaverEnabled;//707
-  uint16_t  screensaverTimeout;//709
+  uint16_t  screensaverTimeout;//708
   bool      screensaverBlank;//710
   bool      screensaverPlayingEnabled;//711
-  uint16_t  screensaverPlayingTimeout;//713
+  uint16_t  screensaverPlayingTimeout;//712
   bool      screensaverPlayingBlank;//714
-  char      mdnsname[24];//738
+  char      mdnsname[24];//715-738
   bool      skipPlaylistUpDown;//739
   char      sch_on[6];
   char      sch_off[6];

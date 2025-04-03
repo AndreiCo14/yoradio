@@ -305,9 +305,9 @@ void Player::stepVol(bool up) {
 								//Снизу малыми шагами...
     if(up) nv = config.store.volume*1.334+1;			//Увеличение звука в 1,334 раза
       else nv = config.store.volume/1.334;			//Уменьшение звука в 1,334 раза
-    if(nv<0) nv=0;
-    if(nv>254) nv=254;
-    setVol(nv);
+//    if(nv<1) nv=1;//Минимальная громкость 1 для кнопок
+//    if(nv>254) nv=254;
+    setVol(constrain(nv,1,254));
 /*
   if (up) {
     if (config.store.volume <= 254 - config.store.volsteps) {
@@ -327,9 +327,9 @@ void Player::stepVol(bool up) {
 
 uint8_t Player::volToI2S(uint8_t volume) {
   int vol = map(volume, 0, 254 - config.station.ovol * 3 , 0, 254);
-  if (vol > 254) vol = 254;
-  if (vol < 0) vol = 0;
-  return vol;
+//  if (vol > 254) vol = 254;
+//  if (vol < 0) vol = 0;
+  return constrain(vol,0,254);
 }
 
 void Player::_loadVol(uint8_t volume) {

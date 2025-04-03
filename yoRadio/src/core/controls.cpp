@@ -458,9 +458,9 @@ void controlsEvent(bool toRight, int8_t volDelta) {
     #endif
     if(volDelta!=0){
       int nv = config.store.volume+volDelta;
-      if(nv<0) nv=0;
-      if(nv>254) nv=254;
-      player.setVol((uint8_t)nv);			//Установка уровня звука
+//      if(nv<1) nv=1;//Минимальная громкость 1 для энкодера
+//      if(nv>254) nv=254;
+      player.setVol(constrain(nv,1,254));			//Установка уровня звука
     }else{
       player.stepVol(toRight);				//Изменение уровня звука Up/Down шагами
     }

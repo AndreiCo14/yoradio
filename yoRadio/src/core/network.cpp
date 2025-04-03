@@ -21,7 +21,7 @@ void doSync(void * pvParameters);
 
 void ticks() {//Один раз в секунду
 
-  //Включение/Выключение по расписанию
+  //Расписание Включение/Выключение по расписанию
   char sch_on_h[3], sch_on_m[3], sch_off_h[3], sch_off_m[3];
   strncpy(sch_on_h, config.store.sch_on, 2);
   strncpy(sch_on_m, config.store.sch_on + 3, 2);
@@ -36,7 +36,7 @@ void ticks() {//Один раз в секунду
       }
       else
       if(config.store.sch_sta != config.lastStation()) {player.sendCommand({PR_PLAY, config.store.sch_sta}); Serial.println("=*Play");}
-      player.sendCommand({PR_VOL, config.store.sch_vol});//Устанавливаем уровень звука
+      player.sendCommand({PR_VOL, config.store.sch_vol});//Устанавливаем уровень звука 1
 //      Serial.println(config.lastStation());
 //      Serial.println(config.store.sch_sta);
 //      Serial.println(config.store.sch_vol);

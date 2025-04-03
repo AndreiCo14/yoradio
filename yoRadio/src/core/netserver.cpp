@@ -416,7 +416,7 @@ void NetServer::onWsMessage(void *arg, uint8_t *data, size_t len, uint8_t client
 Serial.print("=cmd: "); Serial.print(cmd); Serial.print(" val: "); Serial.println(val);
       if (strcmp(cmd, "getmode") == 0     ) { requestOnChange(GETMODE, clientId);     return; }
       if (strcmp(cmd, "getindex") == 0    ) { requestOnChange(GETINDEX, clientId);    return; }
-      if (strcmp(cmd, "getschedule") == 0   ) { requestOnChange(GETSCHEDULE, clientId);   return; }//Если получен запрос getschedule
+      if (strcmp(cmd, "getschedule") == 0   ) { requestOnChange(GETSCHEDULE, clientId);   return; }//Расписание: Если получен запрос getschedule
       if (strcmp(cmd, "getsystem") == 0   ) { requestOnChange(GETSYSTEM, clientId);   return; }
       if (strcmp(cmd, "getscreen") == 0   ) { requestOnChange(GETSCREEN, clientId);   return; }
       if (strcmp(cmd, "gettimezone") == 0 ) { requestOnChange(GETTIMEZONE, clientId); return; }
