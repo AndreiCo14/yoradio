@@ -303,6 +303,7 @@ void NetServer::processQueue(){//Отправка информации в WEB с
                                   config.store.sch_vol2,
                                   config.store.sch_dow2);
                                   break;
+        case TIMER:   sprintf (wsbuf, "{\"timer\":%d}", sch_timer); break; //Таймер
 
         case GETSYSTEM:     sprintf (wsbuf, "{\"sst\":%d,\"aif\":%d,\"vu\":%d,\"softr\":%d,\"vut\":%d,\"mdns\":\"%s\"}", 
                                   config.store.smartstart != 2, 
@@ -659,6 +660,8 @@ Serial.println("=Write setting to EEPROM");
       if (strcmp(cmd, "sch_vol2") == 0) {uint8_t valb = atoi(val); config.saveValue(&config.store.sch_vol2, valb); return;}
       if (strcmp(cmd, "sch_dow2") == 0) {uint8_t valb = atoi(val); config.saveValue(&config.store.sch_dow2, valb); return;}
       
+      if (strcmp(cmd, "timer") == 0) {sch_timer = atoi(val); return;}//Таймер
+
       /*  RESETS  */
       if (strcmp(cmd, "reset") == 0) {
         if (strcmp(val, "system") == 0) {

@@ -34,10 +34,10 @@ void ticks() {//Один раз в секунду
   if(config.store.sch_dow1 >> (6-network.timeinfo.tm_wday) & 1 && sch_pl != sch_st && network.timeinfo.tm_sec < 3){//Если время не равны и первые 3 сек минуты
     if (sch_pl == network.timeinfo.tm_hour*60+network.timeinfo.tm_min){//Пришло время Play
       if (config.store.sch_sta == 0 || config.store.sch_sta == config.lastStation()){
-        if (player.status() == STOPPED) {player.sendCommand({PR_PLAY, config.lastStation()}); Serial.println("=*Playl");}
+        if (player.status() == STOPPED) {player.sendCommand({PR_PLAY, config.lastStation()}); Serial.println("=*Playl");}//Если остановлено - Включаем
       }
       else
-      if(config.store.sch_sta != config.lastStation()) {player.sendCommand({PR_PLAY, config.store.sch_sta}); Serial.println("=*Play");}
+      if(config.store.sch_sta != config.lastStation()) {player.sendCommand({PR_PLAY, config.store.sch_sta}); Serial.println("=*Play");}//Включаем
       player.sendCommand({PR_VOL, config.store.sch_vol});//Устанавливаем уровень звука 1
 //      Serial.println(config.lastStation());
 //      Serial.println(config.store.sch_sta);
@@ -77,6 +77,12 @@ void ticks() {//Один раз в секунду
     }
   }
 
+  //Таймер
+  if (netserver.sch_timer) {
+    if (--netserver.sch_timer == 0) player.sendCommand({PR_STOP, 0});
+    netserver.requestOnChange(TIMER, 0);
+  }
+  
   if(!display.ready()) return; //waiting for SD is ready
   pm.on_ticker();
   static const uint16_t weatherSyncInterval=1800;
